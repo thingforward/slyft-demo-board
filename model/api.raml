@@ -1,0 +1,17 @@
+#%RAML 0.8
+title: demoapi
+baseUri: coap://api.sylft.io/
+version: 0.1
+schemas:
+- value: value_schema.json
+/rotary:
+  get:
+    description: Return value of rotary
+    responses:
+      205:
+        body:
+          application/x-msgpack:
+            schema: value
+/flash:
+  post:
+    description: Makes somthing flashy. No response, no body

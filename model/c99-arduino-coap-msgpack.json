@@ -1,0 +1,6 @@
+{
+  "c_define_prefix": "demoapi",
+  "c_identifier_prefix": "DEMOAPI",
+  "source_file_extension": "cpp",
+  "debug": true
+}
