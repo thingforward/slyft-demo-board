@@ -18,22 +18,25 @@
 int 	rotary_value	= 0;
 int 	last_rotary_value	= 0;
 bool	last_button_value 	= false;
+int 	flashmode = 0;
 
 Grove_LED_Bar	led_bar(PIN_LEDBAR_SCL, PIN_LEDBAR_SDA, true);
 
-void setup_app() {
+void app_setup() {
 	pinMode(PIN_BUTTON, INPUT);
 	pinMode(PIN_ROTARY, INPUT);
 	led_bar.begin();
 }
 
-int get_rotary_value() {
+int app_get_rotary_value() {
 	return rotary_value;
 }
 
-void post_value();
+void app_trigger_flash() {
+	flashmode = 1;
+}
 
-void loop_app() {
+void app_loop() {
 	int rv = analogRead(PIN_ROTARY);
  	if ( abs(rv-last_rotary_value) > 5) {
 		last_rotary_value = rotary_value;
@@ -54,12 +57,24 @@ void loop_app() {
 		led_bar.toggleLed(10);
 		Serial.println("Button pressed");
 
-		post_value();
+		app_post_value();
 	}
 	if (last_button_value == true && bv == false) {
 		Serial.println("Button released");
 	}
 	last_button_value = bv;
+
+	if ( flashmode == 1) {
+		for (int i = 0; i < 10; i++) {
+			led_bar.setLevel(i);
+			delay(20);
+		}
+		for (int i = 10; i > 0; i--) {
+			led_bar.setLevel(i);
+			delay(20);
+		}
+		flashmode = 0;
+	}
 }
 
 
@@ -85,7 +100,9 @@ const char *p_server_ip = "192.168.0.100";
 extern WiFiUDP Udp;
 
 // use coap_sender to post the current rotary value to some endpoint
-void post_value() {
+void app_post_value() {
+
+	// empty payload buffer, initialize struct, serialize into buffer
 	memset(str_payl, 0, sizeof(str_payl));
 	struct DEMOAPI__value v;
 	DEMOAPI__value_init(&v);
@@ -96,6 +113,7 @@ void post_value() {
 	coap_sender_init(&sender,COAP_TYPE_NONCON, 4);
 	/* set post request */
 	coap_sender_post_request(&sender, str_payl, len);
+	/* set our options */
 	coap_sender_add_option(&sender, COAP_OPTION_URI_PATH, buf_uri);
 	coap_sender_add_option(&sender, COAP_OPTION_CONTENT_FORMAT, buf_cf);
 
@@ -136,7 +154,7 @@ bool DEMOAPI__demoapi__get___rotary(
 
     resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(2,5);
     struct DEMOAPI__value  *q = &(resp->data.value_205);
-    q->v = get_rotary_value();
+    q->v = app_get_rotary_value();
 
     //  OR
 
@@ -156,15 +174,7 @@ bool DEMOAPI__demoapi__post___flash(
     struct DEMOAPI__demoapi__post___flash_req *req,
     struct DEMOAPI__demoapi__post___flash_resp *resp) {
 
-	for (int i = 0; i < 10; i++) {
-		led_bar.setLevel(i);
-		delay(20);
-	}
-	for (int i = 10; i > 0; i--) {
-		led_bar.setLevel(i);
-		delay(20);
-	}
-	loop_app();
+    app_trigger_flash();
 
     // send back CHANGED
     resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(2,4);
