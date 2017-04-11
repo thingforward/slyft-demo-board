@@ -79,7 +79,7 @@ int DEMOAPI__demoapi__handle_get_well_known_core(coap_rw_buffer_t *scratch,
     uint8_t id_hi, uint8_t id_lo) {
     Serial.println("DEMOAPI__demoapi__handle_get_well_known_core");
     DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get_well_known_core>REQ>", inpkt);
-    
+
     if (well_known_rsp[0] == '\0') {
         // set up response
         uint16_t len = sizeof(well_known_rsp);
@@ -139,10 +139,10 @@ int DEMOAPI__demoapi__handle_get___rotary(coap_rw_buffer_t *scratch,
 
     Serial.println("DEMOAPI__demoapi__handle_get___rotary");
     DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___rotary>REQ>", inpkt);
-    
+
     // processing
     uint8_t outbuf[512];
-    mpack_memset(outbuf,0,sizeof(outbuf));
+    memset(outbuf,0,sizeof(outbuf));
     size_t resp_len = 0;
     coap_responsecode_t  resp_code;
     coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
@@ -168,7 +168,7 @@ int DEMOAPI__demoapi__handle_get___rotary(coap_rw_buffer_t *scratch,
         // handle code 205, schema is value
         resp_len = resp.data.value_205.DEMOAPI__value_serialize(&(resp.data.value_205), outbuf, sizeof(outbuf));
         resp_content_type = COAP_CONTENTTYPE_APPLICATION_OCTECT_STREAM;
-        Serial.print("DEMOAPI__demoapi__handle_get___rotary: Serializing done, len="); Serial.println(resp_len); 
+        Serial.print("DEMOAPI__demoapi__handle_get___rotary: Serializing done, len="); Serial.println(resp_len);
       }
 
 
@@ -195,10 +195,10 @@ int DEMOAPI__demoapi__handle_post___flash(coap_rw_buffer_t *scratch,
 
     Serial.println("DEMOAPI__demoapi__handle_post___flash");
     DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___flash>REQ>", inpkt);
-    
+
     // processing
     uint8_t outbuf[512];
-    mpack_memset(outbuf,0,sizeof(outbuf));
+    memset(outbuf,0,sizeof(outbuf));
     size_t resp_len = 0;
     coap_responsecode_t  resp_code;
     coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
@@ -233,5 +233,3 @@ int DEMOAPI__demoapi__handle_post___flash(coap_rw_buffer_t *scratch,
     }
 
 }
-
-

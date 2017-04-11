@@ -49,13 +49,15 @@ void _handle_udp_coap_message(udp_microcoap_wrapper *obj) {
             coap_packet_t rsppkt;
             if (pkt.hdr.code == MAKE_RSPCODE(0,0) && pkt.payload.len == 0) {
                 Serial.println("udp_microcoap_wrapper> Processing CoAP ping");
-		rsppkt.hdr.ver = 0x01;
-		rsppkt.hdr.t = COAP_TYPE_RESET;
-		rsppkt.hdr.code = MAKE_RSPCODE(0,0);
-		rsppkt.payload.len = 0;
-		rsppkt.numopts = 0;
-		rsppkt.hdr.id[0] = pkt.hdr.id[0];
-		rsppkt.hdr.id[1] = pkt.hdr.id[1];
+            		rsppkt.hdr.ver = 0x01;
+            		rsppkt.hdr.t = COAP_TYPE_RESET;
+            		rsppkt.hdr.code = MAKE_RSPCODE(0,0);
+            		rsppkt.payload.len = 0;
+            		rsppkt.numopts = 0;
+                rsppkt.tok.len = 0;
+                rsppkt.hdr.tkl = 0;
+            		rsppkt.hdr.id[0] = pkt.hdr.id[0];
+            		rsppkt.hdr.id[1] = pkt.hdr.id[1];
 	    } else {
             	coap_handle_req(&obj->scratch_buf, &pkt, &rsppkt);
 	    }

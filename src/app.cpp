@@ -38,10 +38,10 @@ void app_trigger_flash() {
 
 void app_loop() {
 	int rv = analogRead(PIN_ROTARY);
- 	if ( abs(rv-last_rotary_value) > 5) {
+ 	if ( abs(rv-last_rotary_value) > 10) {
 		last_rotary_value = rotary_value;
 		rotary_value = rv;
-	
+
 		float f = rotary_value / 100.0f;
 		if ( f > 9) {
 			f = 9;
@@ -89,15 +89,16 @@ coap_buffer_t	buf_uri = {
 /* intermedia buffer struct to construct content type */
 coap_content_type_t 	int_cf = COAP_CONTENTTYPE_APPLICATION_OCTECT_STREAM;
 coap_buffer_t	buf_cf = {
-	.p = (const uint8_t*)&int_cf, .len = 1 
+	.p = (const uint8_t*)&int_cf, .len = 1
 };
 
 uint8_t	str_payl[64] = "";
 
 //const char *p_server_ip = "172.20.10.6";
-const char *p_server_ip = "192.168.0.100";
+const char *p_server_ip = "192.168.0.101";
 
 extern WiFiUDP Udp;
+extern void DEMOAPI__demoapi__print_packet(const char *prefix, const coap_packet_t *pkt);
 
 // use coap_sender to post the current rotary value to some endpoint
 void app_post_value() {
@@ -116,6 +117,8 @@ void app_post_value() {
 	/* set our options */
 	coap_sender_add_option(&sender, COAP_OPTION_URI_PATH, buf_uri);
 	coap_sender_add_option(&sender, COAP_OPTION_CONTENT_FORMAT, buf_cf);
+
+	coap_sender_dump("APP>POSTVALUE> ", &sender);
 
 	if ( Udp.beginPacket(p_server_ip, 5683) == 1) {
 		/* build packet */

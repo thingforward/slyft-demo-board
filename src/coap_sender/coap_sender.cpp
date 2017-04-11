@@ -81,4 +81,40 @@ int coap_sender_build(coap_sender_struct_t *s) {
 	return s->build_res;
 }
 
+void coap_sender_dump(const char *prefix, coap_sender_struct_t *s) {
+	coap_packet_t *pkt = &(s->coap_packet);
+	Serial.printf(prefix);
+	Serial.printf(" COAP_HEADER:");
+	Serial.printf(" ver=0x%02X", pkt->hdr.ver);
+	Serial.printf(",t=0x%02X", pkt->hdr.t);
+	Serial.printf(",tkl=0x%02X", pkt->hdr.tkl);
+	Serial.printf(",code=0x%02X", pkt->hdr.code);
+	Serial.printf(",id=0x%02X%02X", pkt->hdr.id[0], pkt->hdr.id[1]);
+	if (pkt->tok.len > 0) {
+			Serial.printf(",tok=0x");
+			for (int i = 0; i < pkt->tok.len; i++) {
+					Serial.printf("%02X",pkt->tok.p[i]);
+			}
+	}
+	Serial.println();
+	Serial.printf(prefix);
+	Serial.printf(" OPTIONS");
+	Serial.printf("(num=%d): ", pkt->numopts);
+	for (int i = 0; i < pkt->numopts; i++) {
+			Serial.printf("%d:num=%d,val=",i,pkt->opts[i].num);
+			for ( int j = 0; j < pkt->opts[i].buf.len; j++) {
+					Serial.printf("%c", pkt->opts[i].buf.p[j]);
+			}
+			Serial.print(",");
+	}
+	Serial.println();
+	Serial.printf(prefix);
+	Serial.printf(" PAYLOAD(len=%d): 0x", pkt->payload.len);
+	if (pkt->payload.len > 0) {
+			for (int i = 0; i < pkt->payload.len; i++) {
+					Serial.printf("%02X ",pkt->payload.p[i]);
+			}
+	}
+	Serial.println();
 
+}

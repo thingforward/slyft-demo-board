@@ -6,7 +6,7 @@ typedef struct coap_sender_struct_s {
 
 	char 	buf[256];			/* output buffer */
 	size_t	buflen = 0;			/* length/size of buf, will be number of bytes for UDP packet */
-		
+
 	char 	buf_token[8];			/* buffer for token construction */
 
 	int	option_idx = 0;
@@ -31,3 +31,5 @@ void coap_sender_add_option(coap_sender_struct_t *s, coap_option_num_t num, coap
 /** serialize the coap request into internal buffer */
 int coap_sender_build(coap_sender_struct_t *s);
 
+/** dump packet */
+void coap_sender_dump(const char *prefix, coap_sender_struct_t *s);
