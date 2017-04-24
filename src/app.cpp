@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "Grove_LED_Bar/Grove_LED_Bar.h"
+#include <TM1637Display.h>
 
 #include "app.h"
 
@@ -14,18 +15,26 @@
 #define PIN_ROTARY	A0
 #define PIN_LEDBAR_SCL	D2
 #define PIN_LEDBAR_SDA	D1
+#define PIN_LCD_SCL	D3
+#define PIN_LCD_SDA	D5
 
 int 	rotary_value	= 0;
 int 	last_rotary_value	= 0;
 bool	last_button_value 	= false;
 int 	flashmode = 0;
 
+// Initialize the LED Bar
 Grove_LED_Bar	led_bar(PIN_LEDBAR_SCL, PIN_LEDBAR_SDA, true);
 
+// Initialize 4-digit display
+TM1637Display display(PIN_LCD_SCL, PIN_LCD_SDA);
+
+// Set up all inputs and outputs
 void app_setup() {
 	pinMode(PIN_BUTTON, INPUT);
 	pinMode(PIN_ROTARY, INPUT);
 	led_bar.begin();
+	display.setBrightness(7);
 }
 
 int app_get_rotary_value() {
@@ -36,6 +45,13 @@ void app_trigger_flash() {
 	flashmode = 1;
 }
 
+// Run the application loop, that is:
+// - read rotary
+// - display rotary value on 4digit LCD
+// - display rotary value on LED Bar
+// - read the button
+// - if button is pressed, post the current rotary value to a server
+// - check flash mode. If set, flash LED bar and LCD
 void app_loop() {
 	int rv = analogRead(PIN_ROTARY);
  	if ( abs(rv-last_rotary_value) > 10) {
@@ -49,6 +65,8 @@ void app_loop() {
 
 		led_bar.setLevel(f);
 		//Serial.printf("rotary: %d\n", rotary_value);
+
+		display.showNumberDec(rv, true);
 	}
 
 
@@ -64,6 +82,7 @@ void app_loop() {
 	}
 	if (last_button_value == true && bv == false) {
 		Serial.println("Button released");
+		led_bar.toggleLed(10);
 	}
 	last_button_value = bv;
 
@@ -72,17 +91,22 @@ void app_loop() {
 	if ( flashmode == 1) {
 		for (int i = 0; i < 10; i++) {
 			led_bar.setLevel(i);
+			display.setBrightness(i,true);
 			delay(20);
 		}
 		for (int i = 10; i > 0; i--) {
 			led_bar.setLevel(i);
+			display.setBrightness(i,true);
 			delay(20);
 		}
+		display.setBrightness(7,true);
 		flashmode = 0;
 	}
 
 	// done app loop
 }
+
+
 
 
 coap_sender_struct_t	sender;
@@ -127,6 +151,10 @@ void app_post_value() {
 
 	coap_sender_dump("APP>POSTVALUE> ", &sender);
 
+	if ( !Udp) {
+		Serial.println("E Udp not available");
+	}
+
 	if ( Udp.beginPacket(p_server_ip, 5683) == 1) {
 		/* build packet */
 		if ( coap_sender_build(&sender) == 0 && sender.buflen > 0) {
@@ -141,7 +169,7 @@ void app_post_value() {
 			Serial.println(sender.build_res);
 		}
 	} else {
-		Serial.print("E udp.beginPacket");
+		Serial.println("E udp.beginPacket");
 	}
 
 }
@@ -184,6 +212,9 @@ bool DEMOAPI__demoapi__post___flash(
     struct DEMOAPI__demoapi__post___flash_req *req,
     struct DEMOAPI__demoapi__post___flash_resp *resp) {
 
+		// do not run flashing code here, because this would slow down
+		// coap response handling. Instead, save flash state to a variable,
+		// handler later in application loop
     app_trigger_flash();
 
     // send back CHANGED

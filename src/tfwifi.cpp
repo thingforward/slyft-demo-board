@@ -22,8 +22,12 @@ void setup_wifi() {
         Serial.print(".");
     }
 
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
+    if (WiFi.status() == WL_CONNECTED) {
+      Serial.println("WiFi connected");
+      Serial.print("IP address: ");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.println("E Not connected, CoAP functionality will not be available");
+      WiFi.disconnect(true);
+    }
 }
