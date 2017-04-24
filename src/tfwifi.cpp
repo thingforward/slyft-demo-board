@@ -5,6 +5,8 @@
 const char* ssid     = "ThingForwardWiFi";
 const char* password = "iotthingforward";
 
+const int TFWIFI_MAX_TRY_COUNT = 20;
+
 void setup_wifi() {
     Serial.println();
     Serial.println();
@@ -14,7 +16,8 @@ void setup_wifi() {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
 
-    while (WiFi.status() != WL_CONNECTED) {
+    int try_count = 0;
+    while (WiFi.status() != WL_CONNECTED && try_count++ < TFWIFI_MAX_TRY_COUNT) {
         delay(500);
         Serial.print(".");
     }
@@ -24,4 +27,3 @@ void setup_wifi() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 }
-

@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "partner",
+    "title": "Device Partner IP Adress schema",
+    "description": "Set IP adress of a partner device",
+    "type": "object",
+    "properties" : {
+    	"id" : {
+          "type": "integer",
+          "description": "partner id"
+        },
+	"ip" : {
+	  "type": "string",
+	  "maxLength": 15,
+	  "description": "IPv4 address"
+    },
+    "additionalProperties": false,
+    "required": ["id" "ip"],
+    "minProperties": 2
+}

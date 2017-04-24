@@ -46,7 +46,6 @@ struct DEMOAPI__value {
  */
 void DEMOAPI__value_init(struct DEMOAPI__value *self);
 
-
 /* ORIGINAL SCHEMA
 {"$schema"=>"http://json-schema.org/draft-04/schema#", "id"=>"value", "title"=>"Single value schema", "description"=>"Transport the value of an input", "type"=>"object", "properties"=>{"v"=>{"type"=>"integer", "description"=>"value as integer"}}, "additionalProperties"=>false, "required"=>["v"], "minProperties"=>1}
  */

@@ -58,9 +58,9 @@ void _handle_udp_coap_message(udp_microcoap_wrapper *obj) {
                 rsppkt.hdr.tkl = 0;
             		rsppkt.hdr.id[0] = pkt.hdr.id[0];
             		rsppkt.hdr.id[1] = pkt.hdr.id[1];
-	    } else {
+	             } else {
             	coap_handle_req(&obj->scratch_buf, &pkt, &rsppkt);
-	    }
+	           }
 
             //memset(obj->packetbuf, 0, sizeof(obj->packetbuf));
             if (0 != (rc = coap_build(obj->packetbuf, &rsplen, &rsppkt))) {

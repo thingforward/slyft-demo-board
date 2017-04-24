@@ -48,9 +48,12 @@ void app_loop() {
 		}
 
 		led_bar.setLevel(f);
-		Serial.printf("rotary: %d\n", rotary_value);
+		//Serial.printf("rotary: %d\n", rotary_value);
 	}
 
+
+	// handle button press/release. Upon press,
+	// post rotary value to server.
 	int bv = digitalRead(PIN_BUTTON);
 
 	if (last_button_value == false && bv == true) {
@@ -64,6 +67,8 @@ void app_loop() {
 	}
 	last_button_value = bv;
 
+
+	// flash mode variable set? Then do some flashing, reset mode
 	if ( flashmode == 1) {
 		for (int i = 0; i < 10; i++) {
 			led_bar.setLevel(i);
@@ -75,6 +80,8 @@ void app_loop() {
 		}
 		flashmode = 0;
 	}
+
+	// done app loop
 }
 
 
@@ -95,7 +102,7 @@ coap_buffer_t	buf_cf = {
 uint8_t	str_payl[64] = "";
 
 //const char *p_server_ip = "172.20.10.6";
-const char *p_server_ip = "192.168.0.101";
+const char *p_server_ip = "192.168.0.100";
 
 extern WiFiUDP Udp;
 extern void DEMOAPI__demoapi__print_packet(const char *prefix, const coap_packet_t *pkt);

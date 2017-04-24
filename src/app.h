@@ -8,7 +8,7 @@ void app_loop();
 /* returns value of the analog sensor */
 int app_get_rotary_value();
 
-/* triggers LED bar flashing */
+/* triggers LED or LCD bar flashing */
 void app_trigger_flash();
 
 /* CoAP-posts the current value to the server */

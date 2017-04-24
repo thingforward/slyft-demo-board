@@ -4,6 +4,7 @@ baseUri: coap://api.sylft.io/
 version: 0.1
 schemas:
 - value: value_schema.json
+- partner: partner_schema.json
 /rotary:
   get:
     description: Return value of rotary
@@ -15,3 +16,9 @@ schemas:
 /flash:
   post:
     description: Makes somthing flashy. No response, no body
+/partner:
+  post:
+    description: Set partner ID and IP address
+    body:
+      application/x-msgpack:
+        schema: partner
