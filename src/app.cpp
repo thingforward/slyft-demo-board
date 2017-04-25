@@ -92,11 +92,13 @@ void app_loop() {
 		for (int i = 0; i < 10; i++) {
 			led_bar.setLevel(i);
 			display.setBrightness(i,true);
+			display.showNumberDec((i%2)==0?8888:1111, true);
 			delay(20);
 		}
 		for (int i = 10; i > 0; i--) {
 			led_bar.setLevel(i);
 			display.setBrightness(i,true);
+			display.showNumberDec((i%2)==0?8888:1111, true);
 			delay(20);
 		}
 		display.setBrightness(7,true);
@@ -126,7 +128,15 @@ coap_buffer_t	buf_cf = {
 uint8_t	str_payl[64] = "";
 
 //const char *p_server_ip = "172.20.10.6";
-const char *p_server_ip = "192.168.0.100";
+char buf_server_ip[16];
+//const char *p_server_ip = & "192.168.0.100";
+
+void app_set_target_ip(const char *p) {
+	strncpy(buf_server_ip, p, sizeof(buf_server_ip)-1);
+	Serial.print("APP>SET_TARGET_IP> Set remote post ip to ");
+	Serial.println(buf_server_ip);
+}
+
 
 extern WiFiUDP Udp;
 extern void DEMOAPI__demoapi__print_packet(const char *prefix, const coap_packet_t *pkt);
@@ -155,7 +165,7 @@ void app_post_value() {
 		Serial.println("E Udp not available");
 	}
 
-	if ( Udp.beginPacket(p_server_ip, 5683) == 1) {
+	if ( Udp.beginPacket(buf_server_ip, 5683) == 1) {
 		/* build packet */
 		if ( coap_sender_build(&sender) == 0 && sender.buflen > 0) {
 			/* send using UDP */

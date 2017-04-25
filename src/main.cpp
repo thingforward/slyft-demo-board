@@ -30,6 +30,11 @@ void loop() {
 
   app_loop();
 
+  //
+  if ( Udp.available() > 0) {
+    app_set_target_ip(Udp.remoteIP().toString().c_str());
+  }
+
   // get coap processing object
   udp_microcoap_wrapper *c = udp_microcoap_wrapper_get();
   c->b_debug = true;

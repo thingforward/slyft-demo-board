@@ -13,3 +13,6 @@ void app_trigger_flash();
 
 /* CoAP-posts the current value to the server */
 void app_post_value();
+
+/* sets the IP Address of where to CoAP-POST the current value */
+void app_set_target_ip(const char *);
