@@ -1,10 +1,8 @@
 #include <Arduino.h>
 #include "tfwifi.h"
 
-//const char* ssid     = "ThingForwardWiFi";
-//const char* password = "iotthingforward";
-const char* ssid     = "building IoT";
-const char* password = "biot2017";
+const char* ssid     = "ThingForwardWiFi";
+const char* password = "iotthingforward";
 
 const int TFWIFI_MAX_TRY_COUNT = 20;
 
