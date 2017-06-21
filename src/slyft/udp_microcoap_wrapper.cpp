@@ -2,7 +2,7 @@
 // This code part has been generated on an "as is" basis, without warranties or conditions of any kind.
 
 
-    #include "Arduino.h"
+#include "Arduino.h"
 
 
 #include "stdarg.h"
@@ -11,7 +11,7 @@
 
 #include "udp_microcoap_wrapper.h"
 #include "microcoap/coap.h"
-#include <udp.h>
+#include <Udp.h>
 
 //
 void _handle_udp_coap_message(udp_microcoap_wrapper *obj) {
