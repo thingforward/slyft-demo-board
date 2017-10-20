@@ -16,13 +16,13 @@ void setup() {
 
 	setup_wifi();
 
-        // UDP-Listen on port 5683 (default CoAP)
-        Udp.begin(5683);
+	// UDP-Listen on port 5683 (default CoAP)
+	Udp.begin(5683);
 
-        // setup microcoap lib
-        coap_setup();
-        // connect UDP object to the endpoints
-        udp_microcoap_wrapper_init(&Udp);
+	// setup microcoap lib
+	coap_setup();
+	// connect UDP object to the endpoints
+	udp_microcoap_wrapper_init(&Udp);
 }
 
 void loop() {

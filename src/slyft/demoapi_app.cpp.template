@@ -18,10 +18,10 @@
 // CoAP Application level handlers
 //
 
-// -- Application level handler for GET to /rotary
-bool DEMOAPI__demoapi__get___rotary(
-    struct DEMOAPI__demoapi__get___rotary_req *req,
-    struct DEMOAPI__demoapi__get___rotary_resp *resp) {
+// -- Application level handler for GET to /temp
+bool DEMOAPI__demoapi__get___temp(
+    struct DEMOAPI__demoapi__get___temp_req *req,
+    struct DEMOAPI__demoapi__get___temp_resp *resp) {
 
     // YOUR CODE GOES HERE ----------- BEGIN
 
@@ -36,7 +36,7 @@ bool DEMOAPI__demoapi__get___rotary(
     // Valid response codes need to be specified in API model.
     
         
-    // resp->response_code = MAKE_RSPCODE(2,5);
+    // resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(2,5);
     // struct DEMOAPI__value  *q = &(resp->data.value_205);
     //  OR 
     
@@ -44,7 +44,7 @@ bool DEMOAPI__demoapi__get___rotary(
     // resp->response_code = COAP_CONTENT;
 
     // default for now: 5.01 NOT_IMPLEMENTED
-    resp->response_code = MAKE_RSPCODE(5,1);
+    resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(5,1);
 
     // YOUR CODE GOES HERE ----------- END
 
@@ -52,10 +52,44 @@ bool DEMOAPI__demoapi__get___rotary(
 }
 
 
-// -- Application level handler for POST to /flash
-bool DEMOAPI__demoapi__post___flash(
-    struct DEMOAPI__demoapi__post___flash_req *req,
-    struct DEMOAPI__demoapi__post___flash_resp *resp) {
+// -- Application level handler for GET to /led
+bool DEMOAPI__demoapi__get___led(
+    struct DEMOAPI__demoapi__get___led_req *req,
+    struct DEMOAPI__demoapi__get___led_resp *resp) {
+
+    // YOUR CODE GOES HERE ----------- BEGIN
+
+    
+
+    // A return value of false causes the endpoint implementation to send a
+    // CoAP 5.00 INTERNAL SERVER ERROR back to the client
+    // return false;
+
+    // When returning true, make sure to set the "response_code "value in "resp" to
+    // the desired value, see coap_responsecode_t in microcoap/coap.h
+    // Valid response codes need to be specified in API model.
+    
+        
+    // resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(2,5);
+    // struct DEMOAPI__value  *q = &(resp->data.value_205);
+    //  OR 
+    
+    // custom response code handling, i.e.
+    // resp->response_code = COAP_CONTENT;
+
+    // default for now: 5.01 NOT_IMPLEMENTED
+    resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(5,1);
+
+    // YOUR CODE GOES HERE ----------- END
+
+    return true;
+}
+
+
+// -- Application level handler for POST to /led/on
+bool DEMOAPI__demoapi__post___led_on(
+    struct DEMOAPI__demoapi__post___led_on_req *req,
+    struct DEMOAPI__demoapi__post___led_on_resp *resp) {
 
     // YOUR CODE GOES HERE ----------- BEGIN
 
@@ -73,7 +107,36 @@ bool DEMOAPI__demoapi__post___flash(
     // resp->response_code = COAP_CONTENT;
 
     // default for now: 5.01 NOT_IMPLEMENTED
-    resp->response_code = MAKE_RSPCODE(5,1);
+    resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(5,1);
+
+    // YOUR CODE GOES HERE ----------- END
+
+    return true;
+}
+
+
+// -- Application level handler for POST to /led/off
+bool DEMOAPI__demoapi__post___led_off(
+    struct DEMOAPI__demoapi__post___led_off_req *req,
+    struct DEMOAPI__demoapi__post___led_off_resp *resp) {
+
+    // YOUR CODE GOES HERE ----------- BEGIN
+
+    
+
+    // A return value of false causes the endpoint implementation to send a
+    // CoAP 5.00 INTERNAL SERVER ERROR back to the client
+    // return false;
+
+    // When returning true, make sure to set the "response_code "value in "resp" to
+    // the desired value, see coap_responsecode_t in microcoap/coap.h
+    // Valid response codes need to be specified in API model.
+    
+    // custom response code handling, i.e.
+    // resp->response_code = COAP_CONTENT;
+
+    // default for now: 5.01 NOT_IMPLEMENTED
+    resp->response_code = (coap_responsecode_t)MAKE_RSPCODE(5,1);
 
     // YOUR CODE GOES HERE ----------- END
 

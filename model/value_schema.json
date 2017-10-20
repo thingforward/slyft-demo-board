@@ -6,8 +6,9 @@
     "type": "object",
     "properties" : {
     	"v" : {
-          "type": "integer",
-          "description": "value as integer"
+          "type": "string",
+          "maxLength": 8,
+          "description": "value as string"
         }
     },
     "additionalProperties": false,

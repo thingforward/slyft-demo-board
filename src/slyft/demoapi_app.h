@@ -22,15 +22,15 @@
 // CoAP Application level handlers
 //
 
-// -- GET  /rotary
+// -- GET  /temp
 
-struct DEMOAPI__demoapi__get___rotary_req {
+struct DEMOAPI__demoapi__get___temp_req {
     struct {
 
     } data;
 };
 
-struct DEMOAPI__demoapi__get___rotary_resp {
+struct DEMOAPI__demoapi__get___temp_resp {
     coap_responsecode_t  response_code;
     struct {
 
@@ -41,30 +41,76 @@ struct DEMOAPI__demoapi__get___rotary_resp {
     } data;
 };
 
-// -- Application level handler for GET to /rotary
-bool DEMOAPI__demoapi__get___rotary(
-    struct DEMOAPI__demoapi__get___rotary_req *req,
-    struct DEMOAPI__demoapi__get___rotary_resp *resp);
+// -- Application level handler for GET to /temp
+bool DEMOAPI__demoapi__get___temp(
+    struct DEMOAPI__demoapi__get___temp_req *req,
+    struct DEMOAPI__demoapi__get___temp_resp *resp);
 
 
-// -- POST  /flash
+// -- GET  /led
 
-struct DEMOAPI__demoapi__post___flash_req {
+struct DEMOAPI__demoapi__get___led_req {
     struct {
 
     } data;
 };
 
-struct DEMOAPI__demoapi__post___flash_resp {
+struct DEMOAPI__demoapi__get___led_resp {
+    coap_responsecode_t  response_code;
+    struct {
+
+  
+        // data struct for response code 205
+        struct DEMOAPI__value  value_205;
+
+    } data;
+};
+
+// -- Application level handler for GET to /led
+bool DEMOAPI__demoapi__get___led(
+    struct DEMOAPI__demoapi__get___led_req *req,
+    struct DEMOAPI__demoapi__get___led_resp *resp);
+
+
+// -- POST  /led/on
+
+struct DEMOAPI__demoapi__post___led_on_req {
+    struct {
+
+    } data;
+};
+
+struct DEMOAPI__demoapi__post___led_on_resp {
     coap_responsecode_t  response_code;
     struct {
 
     } data;
 };
 
-// -- Application level handler for POST to /flash
-bool DEMOAPI__demoapi__post___flash(
-    struct DEMOAPI__demoapi__post___flash_req *req,
-    struct DEMOAPI__demoapi__post___flash_resp *resp);
+// -- Application level handler for POST to /led/on
+bool DEMOAPI__demoapi__post___led_on(
+    struct DEMOAPI__demoapi__post___led_on_req *req,
+    struct DEMOAPI__demoapi__post___led_on_resp *resp);
+
+
+// -- POST  /led/off
+
+struct DEMOAPI__demoapi__post___led_off_req {
+    struct {
+
+    } data;
+};
+
+struct DEMOAPI__demoapi__post___led_off_resp {
+    coap_responsecode_t  response_code;
+    struct {
+
+    } data;
+};
+
+// -- Application level handler for POST to /led/off
+bool DEMOAPI__demoapi__post___led_off(
+    struct DEMOAPI__demoapi__post___led_off_req *req,
+    struct DEMOAPI__demoapi__post___led_off_resp *resp);
 
 

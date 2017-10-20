@@ -11,7 +11,7 @@
 
 void DEMOAPI__value_clean(struct DEMOAPI__value *self) {
 
-	self->v = 0;
+	mpack_memset(self->v,0,sizeof(self->v));
 }
 
 void DEMOAPI__value_parse_next(struct DEMOAPI__value *self, mpack_reader_t *reader) {
@@ -21,7 +21,7 @@ void DEMOAPI__value_parse_next(struct DEMOAPI__value *self, mpack_reader_t *read
 
 
 	if (mpack_memcmp("v",(const char*)buf_key,1) == 0) {
-		self->v = mpack_expect_i32(reader);
+		mpack_expect_utf8_cstr(reader, self->v, sizeof(self->v));
 	}
 
 
@@ -59,9 +59,11 @@ size_t DEMOAPI__value_serialize(const struct DEMOAPI__value *self, uint8_t *outp
 
 		self->DEMOAPI__value_serialize_mpack(self, &writer);
 
+    size_t used = mpack_writer_buffer_used(&writer);
+
     // if all is ok, return length of used bytes. Otherwise 0
     if (mpack_writer_destroy(&writer) == mpack_ok) {
-        return writer.used;
+        return used;
     } else {
         return (size_t)0;
     }
@@ -70,7 +72,7 @@ size_t DEMOAPI__value_serialize(const struct DEMOAPI__value *self, uint8_t *outp
 void DEMOAPI__value_serialize_mpack(const struct DEMOAPI__value *self, mpack_writer_t *writer) {
     mpack_start_map(writer, 1);
 
-	mpack_write_cstr(writer, "v"); mpack_write_i32(writer, self->v);
+	mpack_write_cstr(writer, "v"); mpack_write_cstr(writer, self->v);
 
     mpack_finish_map(writer);
 }

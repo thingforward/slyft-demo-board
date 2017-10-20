@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "tfwifi.h"
 
-//const char* ssid     = "Andreass iPhone";
 const char* ssid     = "ThingForwardWiFi";
 const char* password = "iotthingforward";
 

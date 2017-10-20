@@ -71,6 +71,7 @@ return coap_make_response(scratch, \
 #define RSPCODE_DETAIL(rsp) (rsp & 31)
 
 extern const coap_endpoint_t endpoints[];
+
 static char well_known_rsp[256] = "\0";
 
 
@@ -130,15 +131,16 @@ int DEMOAPI__demoapi__handle_get_well_known_core(coap_rw_buffer_t *scratch,
     return res;
 }
 
+
 // define coap handler functions
 
-// Protocol-level handler for GET requests to /rotary
-int DEMOAPI__demoapi__handle_get___rotary(coap_rw_buffer_t *scratch,
+// Protocol-level handler for GET requests to /temp
+int DEMOAPI__demoapi__handle_get___temp(coap_rw_buffer_t *scratch,
     const coap_packet_t *inpkt, coap_packet_t *outpkt,
     uint8_t id_hi, uint8_t id_lo) {
 
-    Serial.println("DEMOAPI__demoapi__handle_get___rotary");
-    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___rotary>REQ>", inpkt);
+    Serial.println("DEMOAPI__demoapi__handle_get___temp");
+    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___temp>REQ>", inpkt);
     
     // processing
     uint8_t outbuf[512];
@@ -147,28 +149,28 @@ int DEMOAPI__demoapi__handle_get___rotary(coap_rw_buffer_t *scratch,
     coap_responsecode_t  resp_code;
     coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
 
-    struct DEMOAPI__demoapi__get___rotary_req    req;
-    struct DEMOAPI__demoapi__get___rotary_resp   resp;
+    struct DEMOAPI__demoapi__get___temp_req    req;
+    struct DEMOAPI__demoapi__get___temp_resp   resp;
 
 
     DEMOAPI__value_init(&(resp.data.value_205));
 
 
-    Serial.println("DEMOAPI__demoapi__handle_get___rotary: Forwarding to DEMOAPI__demoapi__get___rotary");
+    Serial.println("DEMOAPI__demoapi__handle_get___temp: Forwarding to DEMOAPI__demoapi__get___temp");
     // forward req,resp structs to application handler
-    bool handled = DEMOAPI__demoapi__get___rotary(&req, &resp);
-    Serial.print("DEMOAPI__demoapi__handle_get___rotary: returned from DEMOAPI__demoapi__get___rotary: "); Serial.println(handled);
+    bool handled = DEMOAPI__demoapi__get___temp(&req, &resp);
+    Serial.print("DEMOAPI__demoapi__handle_get___temp: returned from DEMOAPI__demoapi__get___temp: "); Serial.println(handled);
 
     if (handled) {
       // take response code from resp
       resp_code = resp.response_code;
       // form the response body
       if ( RSPCODE_CLASS(resp_code) == 2 && RSPCODE_DETAIL(resp_code) == 05) {
-        Serial.println("DEMOAPI__demoapi__handle_get___rotary: Serializing response for code=205, schema=value");
+        Serial.println("DEMOAPI__demoapi__handle_get___temp: Serializing response for code=205, schema=value");
         // handle code 205, schema is value
         resp_len = resp.data.value_205.DEMOAPI__value_serialize(&(resp.data.value_205), outbuf, sizeof(outbuf));
         resp_content_type = COAP_CONTENTTYPE_APPLICATION_OCTECT_STREAM;
-        Serial.print("DEMOAPI__demoapi__handle_get___rotary: Serializing done, len="); Serial.println(resp_len); 
+        Serial.print("DEMOAPI__demoapi__handle_get___temp: Serializing done, len="); Serial.println(resp_len); 
       }
 
 
@@ -179,22 +181,22 @@ int DEMOAPI__demoapi__handle_get___rotary(coap_rw_buffer_t *scratch,
         &inpkt->tok,
         resp_code, resp_content_type
       );
-      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___rotary>RESP>", outpkt);
+      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___temp>RESP>", outpkt);
       return res;
     } else {
-      Serial.print("DEMOAPI__demoapi__handle_get___rotary: -> INTERNAL_SERVER_ERROR");
+      Serial.print("DEMOAPI__demoapi__handle_get___temp: -> INTERNAL_SERVER_ERROR");
       COAP_MAKERESPONSE_INTERNALSERVERERROR
     }
 
 }
 
-// Protocol-level handler for POST requests to /flash
-int DEMOAPI__demoapi__handle_post___flash(coap_rw_buffer_t *scratch,
+// Protocol-level handler for GET requests to /led
+int DEMOAPI__demoapi__handle_get___led(coap_rw_buffer_t *scratch,
     const coap_packet_t *inpkt, coap_packet_t *outpkt,
     uint8_t id_hi, uint8_t id_lo) {
 
-    Serial.println("DEMOAPI__demoapi__handle_post___flash");
-    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___flash>REQ>", inpkt);
+    Serial.println("DEMOAPI__demoapi__handle_get___led");
+    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___led>REQ>", inpkt);
     
     // processing
     uint8_t outbuf[512];
@@ -203,15 +205,71 @@ int DEMOAPI__demoapi__handle_post___flash(coap_rw_buffer_t *scratch,
     coap_responsecode_t  resp_code;
     coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
 
-    struct DEMOAPI__demoapi__post___flash_req    req;
-    struct DEMOAPI__demoapi__post___flash_resp   resp;
+    struct DEMOAPI__demoapi__get___led_req    req;
+    struct DEMOAPI__demoapi__get___led_resp   resp;
 
 
+    DEMOAPI__value_init(&(resp.data.value_205));
 
-    Serial.println("DEMOAPI__demoapi__handle_post___flash: Forwarding to DEMOAPI__demoapi__post___flash");
+
+    Serial.println("DEMOAPI__demoapi__handle_get___led: Forwarding to DEMOAPI__demoapi__get___led");
     // forward req,resp structs to application handler
-    bool handled = DEMOAPI__demoapi__post___flash(&req, &resp);
-    Serial.print("DEMOAPI__demoapi__handle_post___flash: returned from DEMOAPI__demoapi__post___flash: "); Serial.println(handled);
+    bool handled = DEMOAPI__demoapi__get___led(&req, &resp);
+    Serial.print("DEMOAPI__demoapi__handle_get___led: returned from DEMOAPI__demoapi__get___led: "); Serial.println(handled);
+
+    if (handled) {
+      // take response code from resp
+      resp_code = resp.response_code;
+      // form the response body
+      if ( RSPCODE_CLASS(resp_code) == 2 && RSPCODE_DETAIL(resp_code) == 05) {
+        Serial.println("DEMOAPI__demoapi__handle_get___led: Serializing response for code=205, schema=value");
+        // handle code 205, schema is value
+        resp_len = resp.data.value_205.DEMOAPI__value_serialize(&(resp.data.value_205), outbuf, sizeof(outbuf));
+        resp_content_type = COAP_CONTENTTYPE_APPLICATION_OCTECT_STREAM;
+        Serial.print("DEMOAPI__demoapi__handle_get___led: Serializing done, len="); Serial.println(resp_len); 
+      }
+
+
+      int res = coap_make_response(scratch,
+        outpkt,
+        (uint8_t*)outbuf, resp_len,
+        id_hi, id_lo,
+        &inpkt->tok,
+        resp_code, resp_content_type
+      );
+      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_get___led>RESP>", outpkt);
+      return res;
+    } else {
+      Serial.print("DEMOAPI__demoapi__handle_get___led: -> INTERNAL_SERVER_ERROR");
+      COAP_MAKERESPONSE_INTERNALSERVERERROR
+    }
+
+}
+
+// Protocol-level handler for POST requests to /led/on
+int DEMOAPI__demoapi__handle_post___led_on(coap_rw_buffer_t *scratch,
+    const coap_packet_t *inpkt, coap_packet_t *outpkt,
+    uint8_t id_hi, uint8_t id_lo) {
+
+    Serial.println("DEMOAPI__demoapi__handle_post___led_on");
+    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___led_on>REQ>", inpkt);
+    
+    // processing
+    uint8_t outbuf[512];
+    mpack_memset(outbuf,0,sizeof(outbuf));
+    size_t resp_len = 0;
+    coap_responsecode_t  resp_code;
+    coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
+
+    struct DEMOAPI__demoapi__post___led_on_req    req;
+    struct DEMOAPI__demoapi__post___led_on_resp   resp;
+
+
+
+    Serial.println("DEMOAPI__demoapi__handle_post___led_on: Forwarding to DEMOAPI__demoapi__post___led_on");
+    // forward req,resp structs to application handler
+    bool handled = DEMOAPI__demoapi__post___led_on(&req, &resp);
+    Serial.print("DEMOAPI__demoapi__handle_post___led_on: returned from DEMOAPI__demoapi__post___led_on: "); Serial.println(handled);
 
     if (handled) {
       // take response code from resp
@@ -225,10 +283,56 @@ int DEMOAPI__demoapi__handle_post___flash(coap_rw_buffer_t *scratch,
         &inpkt->tok,
         resp_code, resp_content_type
       );
-      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___flash>RESP>", outpkt);
+      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___led_on>RESP>", outpkt);
       return res;
     } else {
-      Serial.print("DEMOAPI__demoapi__handle_post___flash: -> INTERNAL_SERVER_ERROR");
+      Serial.print("DEMOAPI__demoapi__handle_post___led_on: -> INTERNAL_SERVER_ERROR");
+      COAP_MAKERESPONSE_INTERNALSERVERERROR
+    }
+
+}
+
+// Protocol-level handler for POST requests to /led/off
+int DEMOAPI__demoapi__handle_post___led_off(coap_rw_buffer_t *scratch,
+    const coap_packet_t *inpkt, coap_packet_t *outpkt,
+    uint8_t id_hi, uint8_t id_lo) {
+
+    Serial.println("DEMOAPI__demoapi__handle_post___led_off");
+    DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___led_off>REQ>", inpkt);
+    
+    // processing
+    uint8_t outbuf[512];
+    mpack_memset(outbuf,0,sizeof(outbuf));
+    size_t resp_len = 0;
+    coap_responsecode_t  resp_code;
+    coap_content_type_t  resp_content_type = COAP_CONTENTTYPE_NONE;
+
+    struct DEMOAPI__demoapi__post___led_off_req    req;
+    struct DEMOAPI__demoapi__post___led_off_resp   resp;
+
+
+
+    Serial.println("DEMOAPI__demoapi__handle_post___led_off: Forwarding to DEMOAPI__demoapi__post___led_off");
+    // forward req,resp structs to application handler
+    bool handled = DEMOAPI__demoapi__post___led_off(&req, &resp);
+    Serial.print("DEMOAPI__demoapi__handle_post___led_off: returned from DEMOAPI__demoapi__post___led_off: "); Serial.println(handled);
+
+    if (handled) {
+      // take response code from resp
+      resp_code = resp.response_code;
+      // form the response body
+
+      int res = coap_make_response(scratch,
+        outpkt,
+        (uint8_t*)outbuf, resp_len,
+        id_hi, id_lo,
+        &inpkt->tok,
+        resp_code, resp_content_type
+      );
+      DEMOAPI__demoapi__print_packet("DEMOAPI__demoapi__handle_post___led_off>RESP>", outpkt);
+      return res;
+    } else {
+      Serial.print("DEMOAPI__demoapi__handle_post___led_off: -> INTERNAL_SERVER_ERROR");
       COAP_MAKERESPONSE_INTERNALSERVERERROR
     }
 

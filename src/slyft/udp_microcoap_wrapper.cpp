@@ -2,7 +2,7 @@
 // This code part has been generated on an "as is" basis, without warranties or conditions of any kind.
 
 
-    #include "Arduino.h"
+#include "Arduino.h"
 
 
 #include "stdarg.h"
@@ -11,7 +11,7 @@
 
 #include "udp_microcoap_wrapper.h"
 #include "microcoap/coap.h"
-#include <udp.h>
+#include <Udp.h>
 
 //
 void _handle_udp_coap_message(udp_microcoap_wrapper *obj) {
@@ -47,18 +47,25 @@ void _handle_udp_coap_message(udp_microcoap_wrapper *obj) {
 
             size_t rsplen = sizeof(obj->packetbuf);
             coap_packet_t rsppkt;
+
+
+            // check for a CoAP Ping (empty code, no payload). Answer with RST
             if (pkt.hdr.code == MAKE_RSPCODE(0,0) && pkt.payload.len == 0) {
+              if (obj->b_debug) {
                 Serial.println("udp_microcoap_wrapper> Processing CoAP ping");
-		rsppkt.hdr.ver = 0x01;
-		rsppkt.hdr.t = COAP_TYPE_RESET;
-		rsppkt.hdr.code = MAKE_RSPCODE(0,0);
-		rsppkt.payload.len = 0;
-		rsppkt.numopts = 0;
-		rsppkt.hdr.id[0] = pkt.hdr.id[0];
-		rsppkt.hdr.id[1] = pkt.hdr.id[1];
-	    } else {
-            	coap_handle_req(&obj->scratch_buf, &pkt, &rsppkt);
-	    }
+              }
+              rsppkt.hdr.ver = 0x01;
+              rsppkt.hdr.t = COAP_TYPE_RESET;
+              rsppkt.hdr.code = MAKE_RSPCODE(0,0);
+              rsppkt.payload.len = 0;
+              rsppkt.numopts = 0;
+              rsppkt.tok.len = 0;
+              rsppkt.hdr.tkl = 0;
+              rsppkt.hdr.id[0] = pkt.hdr.id[0];
+              rsppkt.hdr.id[1] = pkt.hdr.id[1];
+            } else {
+              coap_handle_req(&obj->scratch_buf, &pkt, &rsppkt);
+            }
 
             //memset(obj->packetbuf, 0, sizeof(obj->packetbuf));
             if (0 != (rc = coap_build(obj->packetbuf, &rsplen, &rsppkt))) {

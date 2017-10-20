@@ -35,3 +35,9 @@
 .piolibdeps
 .clang_complete
 .gcc-flags.json
+
+CMake*
+cmake*
+.idea
+model/all.tar
+

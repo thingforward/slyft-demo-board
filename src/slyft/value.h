@@ -11,8 +11,8 @@
 #include "mpack/mpack.h"
 
 struct DEMOAPI__value {
-  /* value as integer */
-  int32_t	v;
+  /* value as string */
+  char	v[9];
 
   /**
   * Wipes contents to \0
@@ -64,7 +64,7 @@ void DEMOAPI__value_init(struct DEMOAPI__value *self);
 
 
 /* ORIGINAL SCHEMA
-{"$schema"=>"http://json-schema.org/draft-04/schema#", "id"=>"value", "title"=>"Single value schema", "description"=>"Transport the value of an input", "type"=>"object", "properties"=>{"v"=>{"type"=>"integer", "description"=>"value as integer"}}, "additionalProperties"=>false, "required"=>["v"], "minProperties"=>1}
+{"$schema"=>"http://json-schema.org/draft-04/schema#", "id"=>"value", "title"=>"Single value schema", "description"=>"Transport the value of an input", "type"=>"object", "properties"=>{"v"=>{"type"=>"string", "maxLength"=>8, "description"=>"value as string"}}, "additionalProperties"=>false, "required"=>["v"], "minProperties"=>1}
  */
 #endif		//demoapi_VALUE_H
 

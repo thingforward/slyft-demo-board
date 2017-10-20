@@ -4,14 +4,25 @@ baseUri: coap://api.sylft.io/
 version: 0.1
 schemas:
 - value: value_schema.json
-/rotary:
+/temp:
   get:
-    description: Return value of rotary
+    description: Return temperature (as string)
     responses:
       205:
         body:
           application/x-msgpack:
             schema: value
-/flash:
+/led:
+  get:
+    description: Return value of led
+    responses:
+      205:
+        body:
+          application/x-msgpack:
+            schema: value
+/led/on:
   post:
-    description: Makes somthing flashy. No response, no body
+    description: Turn LED on
+/led/off:
+  post:
+    description: Turn LED off
